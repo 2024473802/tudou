@@ -7,8 +7,8 @@
 // 游戏配置
 // ============================================
 const CONFIG = {
-    CANVAS_WIDTH: window.innerWidth,
-    CANVAS_HEIGHT: window.innerHeight,
+    CANVAS_WIDTH: 800,  // Will be updated in init()
+    CANVAS_HEIGHT: 600, // Will be updated in init()
     WAVE_DURATION: 30, // 每波持续秒数
     BASE_ENEMY_COUNT: 5,
     ENEMY_SPAWN_INTERVAL: 2000, // 敌人生成间隔(ms)
@@ -17,6 +17,9 @@ const CONFIG = {
     PLAYER_BASE_HEALTH: 100,
     PLAYER_BASE_DAMAGE: 10,
 };
+
+// Diagonal movement speed factor (1/√2 ≈ 0.707)
+const DIAGONAL_SPEED_FACTOR = 1 / Math.sqrt(2);
 
 // ============================================
 // 武侠武器数据
@@ -309,8 +312,8 @@ class Player {
         
         // 标准化对角移动
         if (dx !== 0 && dy !== 0) {
-            dx *= 0.707;
-            dy *= 0.707;
+            dx *= DIAGONAL_SPEED_FACTOR;
+            dy *= DIAGONAL_SPEED_FACTOR;
         }
         
         this.x += dx * this.speed;
@@ -612,6 +615,20 @@ class Pickup {
 // ============================================
 // 工具函数
 // ============================================
+
+/**
+ * Fisher-Yates shuffle algorithm for proper randomization
+ * @param {Array} array - Array to shuffle
+ * @returns {Array} - Shuffled array (mutates original)
+ */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 function createDamageNumber(x, y, text, type = 'damage') {
     const div = document.createElement('div');
     div.className = `damage-number ${type}`;
@@ -712,8 +729,8 @@ function generateShopItems() {
     const shopContainer = document.getElementById('shop-items');
     shopContainer.innerHTML = '';
     
-    // 随机选择5个物品
-    const shuffled = [...SHOP_ITEMS].sort(() => Math.random() - 0.5);
+    // 随机选择5个物品 using Fisher-Yates shuffle
+    const shuffled = shuffleArray([...SHOP_ITEMS]);
     const items = shuffled.slice(0, 5);
     
     items.forEach((item, index) => {
@@ -735,12 +752,27 @@ function generateShopItems() {
             price = item.price;
         }
         
-        div.innerHTML = `
-            <div class="shop-item-icon">${icon}</div>
-            <div class="shop-item-name">${name}</div>
-            <div class="shop-item-desc">${description}</div>
-            <div class="shop-item-price">💰 ${price}</div>
-        `;
+        // Use DOM methods to avoid innerHTML XSS risks
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'shop-item-icon';
+        iconDiv.textContent = icon;
+        
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'shop-item-name';
+        nameDiv.textContent = name;
+        
+        const descDiv = document.createElement('div');
+        descDiv.className = 'shop-item-desc';
+        descDiv.textContent = description;
+        
+        const priceDiv = document.createElement('div');
+        priceDiv.className = 'shop-item-price';
+        priceDiv.textContent = `💰 ${price}`;
+        
+        div.appendChild(iconDiv);
+        div.appendChild(nameDiv);
+        div.appendChild(descDiv);
+        div.appendChild(priceDiv);
         
         div.addEventListener('click', () => buyItem(item, div));
         shopContainer.appendChild(div);
@@ -773,7 +805,11 @@ function buyItem(item, element) {
     }
     
     element.classList.add('sold');
-    element.innerHTML += '<div style="color: #888; margin-top: 10px;">已购买</div>';
+    const soldDiv = document.createElement('div');
+    soldDiv.style.color = '#888';
+    soldDiv.style.marginTop = '10px';
+    soldDiv.textContent = '已购买';
+    element.appendChild(soldDiv);
 }
 
 function rerollShop() {
@@ -812,18 +848,31 @@ function showLevelUp() {
     const container = document.getElementById('levelup-options');
     container.innerHTML = '';
     
-    // 随机选择3个升级选项
-    const shuffled = [...LEVELUP_OPTIONS].sort(() => Math.random() - 0.5);
+    // 随机选择3个升级选项 using Fisher-Yates shuffle
+    const shuffled = shuffleArray([...LEVELUP_OPTIONS]);
     const options = shuffled.slice(0, 3);
     
     options.forEach(option => {
         const div = document.createElement('div');
         div.className = 'levelup-option';
-        div.innerHTML = `
-            <div class="levelup-option-icon">${option.icon}</div>
-            <div class="levelup-option-name">${option.name}</div>
-            <div class="levelup-option-desc">${option.description}</div>
-        `;
+        
+        // Use DOM methods to avoid innerHTML XSS risks
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'levelup-option-icon';
+        iconDiv.textContent = option.icon;
+        
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'levelup-option-name';
+        nameDiv.textContent = option.name;
+        
+        const descDiv = document.createElement('div');
+        descDiv.className = 'levelup-option-desc';
+        descDiv.textContent = option.description;
+        
+        div.appendChild(iconDiv);
+        div.appendChild(nameDiv);
+        div.appendChild(descDiv);
+        
         div.addEventListener('click', () => selectLevelUp(option));
         container.appendChild(div);
     });
