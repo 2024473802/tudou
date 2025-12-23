@@ -1073,16 +1073,20 @@ function init() {
         game.keys[e.key.toLowerCase()] = false;
     });
     
-    // 鼠标事件 - 追踪鼠标位置
+    // 鼠标事件 - 追踪鼠标位置（相对于画布）
     window.addEventListener('mousemove', (e) => {
-        game.mouseX = e.clientX;
-        game.mouseY = e.clientY;
+        const rect = game.canvas.getBoundingClientRect();
+        game.mouseX = e.clientX - rect.left;
+        game.mouseY = e.clientY - rect.top;
     });
     
-    // 鼠标点击射击
+    // 鼠标点击射击（使用画布相对坐标）
     window.addEventListener('click', (e) => {
         if (game.state === 'playing' && !game.paused && game.player) {
-            game.player.manualShoot(e.clientX, e.clientY);
+            const rect = game.canvas.getBoundingClientRect();
+            const canvasX = e.clientX - rect.left;
+            const canvasY = e.clientY - rect.top;
+            game.player.manualShoot(canvasX, canvasY);
         }
     });
     
