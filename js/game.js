@@ -213,6 +213,10 @@ let game = {
     // 输入状态
     keys: {},
     
+    // 鼠标位置
+    mouseX: 0,
+    mouseY: 0,
+    
     // 是否暂停
     paused: false
 };
@@ -443,6 +447,27 @@ class Player {
         if (effect.pickupRadius) {
             this.pickupRadius *= (1 + effect.pickupRadius);
         }
+    }
+    
+    manualShoot(targetX, targetY) {
+        // 使用第一个武器进行手动射击，如果没有武器则使用默认攻击
+        const weaponId = this.weapons[0] || 'sword';
+        const weapon = WEAPONS[weaponId];
+        
+        // 计算射击角度
+        const angle = Math.atan2(targetY - this.y, targetX - this.x);
+        
+        // 手动射击的弹药范围比自动射击更远
+        const shootRange = Math.max(weapon.range * 2, 300);
+        
+        // 发射弹药
+        game.projectiles.push(new Projectile(
+            this.x, this.y,
+            angle,
+            weapon.damage * this.damageMultiplier,
+            shootRange,
+            weapon.icon
+        ));
     }
     
     draw(ctx) {
@@ -1046,6 +1071,19 @@ function init() {
     });
     window.addEventListener('keyup', (e) => {
         game.keys[e.key.toLowerCase()] = false;
+    });
+    
+    // 鼠标事件 - 追踪鼠标位置
+    window.addEventListener('mousemove', (e) => {
+        game.mouseX = e.clientX;
+        game.mouseY = e.clientY;
+    });
+    
+    // 鼠标点击射击
+    window.addEventListener('click', (e) => {
+        if (game.state === 'playing' && !game.paused && game.player) {
+            game.player.manualShoot(e.clientX, e.clientY);
+        }
     });
     
     // 菜单按钮
