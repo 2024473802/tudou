@@ -1,0 +1,575 @@
+/* 武侠土豆兄弟 - 样式表 */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #8b0000;
+    --secondary-color: #ffd700;
+    --bg-dark: #1a1a2e;
+    --bg-medium: #16213e;
+    --text-light: #eee;
+    --health-color: #e74c3c;
+    --exp-color: #3498db;
+    --gold-color: #f1c40f;
+}
+
+body {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+    color: var(--text-light);
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* 屏幕通用样式 */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen.hidden {
+    display: none;
+}
+
+/* 主菜单 */
+.menu-container {
+    text-align: center;
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    border: 2px solid var(--secondary-color);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+.game-title {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 4rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8),
+                 0 0 20px rgba(255, 215, 0, 0.5);
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.menu-btn {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 1.3rem;
+    padding: 15px 40px;
+    background: linear-gradient(180deg, var(--primary-color) 0%, #5a0000 100%);
+    color: var(--text-light);
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.menu-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    background: linear-gradient(180deg, #a00000 0%, var(--primary-color) 100%);
+}
+
+/* 角色选择 */
+.character-select h3 {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.character-options {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.character-option {
+    padding: 20px;
+    background: rgba(50, 50, 70, 0.8);
+    border: 2px solid #555;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.character-option:hover {
+    border-color: var(--secondary-color);
+    transform: translateY(-5px);
+}
+
+.character-option.selected {
+    border-color: var(--secondary-color);
+    background: rgba(139, 0, 0, 0.5);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.character-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.character-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.character-desc {
+    font-size: 0.9rem;
+    color: #8f8;
+}
+
+/* 游戏说明 */
+.instructions-container {
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 20px;
+    border: 2px solid var(--secondary-color);
+    max-width: 600px;
+}
+
+.instructions-container h2 {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.instructions-content {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.instructions-content p {
+    margin: 15px 0 10px;
+    font-size: 1.1rem;
+}
+
+.instructions-content ul {
+    margin-left: 25px;
+}
+
+.instructions-content li {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+kbd {
+    background: #333;
+    padding: 3px 8px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    font-family: monospace;
+    margin: 0 3px;
+}
+
+/* 游戏HUD */
+#game-hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px 20px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    z-index: 100;
+}
+
+.hud-left, .hud-right {
+    min-width: 200px;
+}
+
+.hud-right {
+    text-align: right;
+}
+
+.hud-center {
+    text-align: center;
+}
+
+.health-bar, .exp-bar {
+    position: relative;
+    width: 200px;
+    height: 25px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    border: 2px solid #555;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.health-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #c0392b, var(--health-color));
+    transition: width 0.3s ease;
+}
+
+.exp-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #2980b9, var(--exp-color));
+    transition: width 0.3s ease;
+}
+
+.health-bar span, .exp-bar span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+#wave-info {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+#wave-timer {
+    font-size: 1.1rem;
+    color: #ccc;
+}
+
+#gold-display, #level-display {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+#gold-display {
+    color: var(--gold-color);
+}
+
+/* 游戏画布 */
+#game-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* 武器栏 */
+#weapon-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 15px;
+    border-radius: 15px;
+    border: 2px solid var(--secondary-color);
+    z-index: 100;
+}
+
+.weapon-slot {
+    width: 60px;
+    height: 60px;
+    background: rgba(50, 50, 70, 0.8);
+    border: 2px solid #555;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+}
+
+.weapon-slot.active {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* 商店界面 */
+.shop-container {
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 20px;
+    border: 2px solid var(--secondary-color);
+    max-width: 800px;
+    text-align: center;
+}
+
+.shop-container h2 {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+.shop-gold {
+    font-size: 1.5rem;
+    color: var(--gold-color);
+    margin-bottom: 25px;
+}
+
+.shop-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.shop-item {
+    width: 150px;
+    padding: 15px;
+    background: rgba(50, 50, 70, 0.9);
+    border: 2px solid #555;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.shop-item:hover {
+    border-color: var(--secondary-color);
+    transform: translateY(-5px);
+}
+
+.shop-item.sold {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.shop-item-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.shop-item-name {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--secondary-color);
+}
+
+.shop-item-desc {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-bottom: 10px;
+}
+
+.shop-item-price {
+    font-size: 1rem;
+    color: var(--gold-color);
+}
+
+.shop-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.shop-btn {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 1.1rem;
+    padding: 12px 25px;
+    background: rgba(50, 50, 70, 0.9);
+    color: var(--text-light);
+    border: 2px solid #555;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.shop-btn:hover {
+    border-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.shop-btn.primary {
+    background: linear-gradient(180deg, var(--primary-color) 0%, #5a0000 100%);
+    border-color: var(--secondary-color);
+}
+
+/* 游戏结束 */
+.game-over-container {
+    padding: 50px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 20px;
+    border: 2px solid var(--primary-color);
+    text-align: center;
+}
+
+.game-over-container h2 {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+}
+
+.game-over-stats {
+    margin-bottom: 30px;
+}
+
+.game-over-stats p {
+    font-size: 1.3rem;
+    margin: 10px 0;
+}
+
+.game-over-stats span {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+/* 升级界面 */
+.levelup-container {
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 20px;
+    border: 2px solid var(--secondary-color);
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
+}
+
+.levelup-container h2 {
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.levelup-subtitle {
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+.levelup-options {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.levelup-option {
+    width: 180px;
+    padding: 20px;
+    background: rgba(50, 50, 70, 0.9);
+    border: 2px solid #555;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.levelup-option:hover {
+    border-color: var(--secondary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+}
+
+.levelup-option-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.levelup-option-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.levelup-option-desc {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+/* 浮动伤害数字 */
+.damage-number {
+    position: absolute;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff6b6b;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    animation: floatUp 1s ease-out forwards;
+    z-index: 200;
+}
+
+.damage-number.heal {
+    color: #6bff6b;
+}
+
+.damage-number.gold {
+    color: var(--gold-color);
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 2.5rem;
+    }
+    
+    .character-options {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .health-bar, .exp-bar {
+        width: 150px;
+    }
+    
+    .weapon-slot {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    
+    .shop-items {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .levelup-options {
+        flex-direction: column;
+        align-items: center;
+    }
+}

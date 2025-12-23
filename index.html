@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武侠土豆兄弟 - Wuxia Potato Brothers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 主菜单 -->
+    <div id="main-menu" class="screen">
+        <div class="menu-container">
+            <h1 class="game-title">武侠土豆兄弟</h1>
+            <p class="subtitle">Wuxia Potato Brothers</p>
+            <div class="menu-buttons">
+                <button id="start-game" class="menu-btn">开始游戏</button>
+                <button id="how-to-play" class="menu-btn">游戏说明</button>
+            </div>
+            <div class="character-select">
+                <h3>选择门派</h3>
+                <div class="character-options">
+                    <div class="character-option selected" data-character="sword">
+                        <div class="character-icon">⚔️</div>
+                        <div class="character-name">剑客</div>
+                        <div class="character-desc">攻击+10%</div>
+                    </div>
+                    <div class="character-option" data-character="monk">
+                        <div class="character-icon">🥋</div>
+                        <div class="character-name">少林僧</div>
+                        <div class="character-desc">生命+20%</div>
+                    </div>
+                    <div class="character-option" data-character="assassin">
+                        <div class="character-icon">🗡️</div>
+                        <div class="character-name">刺客</div>
+                        <div class="character-desc">速度+15%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏说明 -->
+    <div id="instructions" class="screen hidden">
+        <div class="instructions-container">
+            <h2>游戏说明</h2>
+            <div class="instructions-content">
+                <p>🎮 <strong>操作方式：</strong></p>
+                <ul>
+                    <li>使用 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 或方向键移动</li>
+                    <li>角色会自动攻击附近的敌人</li>
+                </ul>
+                <p>⚔️ <strong>游戏目标：</strong></p>
+                <ul>
+                    <li>击败每波敌人，生存到最后</li>
+                    <li>收集金币，在商店购买武器和道具</li>
+                    <li>升级角色，变得更强</li>
+                </ul>
+                <p>🏆 <strong>武侠秘籍：</strong></p>
+                <ul>
+                    <li>合理搭配武器，打造属于你的武侠</li>
+                    <li>注意走位，避免被敌人包围</li>
+                    <li>每波结束后记得购买装备</li>
+                </ul>
+            </div>
+            <button id="back-to-menu" class="menu-btn">返回主菜单</button>
+        </div>
+    </div>
+
+    <!-- 游戏界面 -->
+    <div id="game-screen" class="screen hidden">
+        <!-- 游戏HUD -->
+        <div id="game-hud">
+            <div class="hud-left">
+                <div class="health-bar">
+                    <div class="health-fill" id="health-fill"></div>
+                    <span id="health-text">100/100</span>
+                </div>
+                <div class="exp-bar">
+                    <div class="exp-fill" id="exp-fill"></div>
+                    <span id="exp-text">经验: 0/10</span>
+                </div>
+            </div>
+            <div class="hud-center">
+                <div id="wave-info">第 <span id="wave-number">1</span> 波</div>
+                <div id="wave-timer">剩余: <span id="timer">30</span>秒</div>
+            </div>
+            <div class="hud-right">
+                <div id="gold-display">💰 <span id="gold-amount">0</span></div>
+                <div id="level-display">等级: <span id="level">1</span></div>
+            </div>
+        </div>
+
+        <!-- 游戏画布 -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- 武器栏 -->
+        <div id="weapon-bar">
+            <div class="weapon-slot" id="weapon-slot-0"></div>
+            <div class="weapon-slot" id="weapon-slot-1"></div>
+            <div class="weapon-slot" id="weapon-slot-2"></div>
+            <div class="weapon-slot" id="weapon-slot-3"></div>
+            <div class="weapon-slot" id="weapon-slot-4"></div>
+            <div class="weapon-slot" id="weapon-slot-5"></div>
+        </div>
+    </div>
+
+    <!-- 商店界面 -->
+    <div id="shop-screen" class="screen hidden">
+        <div class="shop-container">
+            <h2>武林商铺</h2>
+            <div class="shop-gold">💰 <span id="shop-gold">0</span></div>
+            <div class="shop-items" id="shop-items">
+                <!-- 商品动态生成 -->
+            </div>
+            <div class="shop-buttons">
+                <button id="reroll-btn" class="shop-btn">🎲 刷新 (5金)</button>
+                <button id="continue-btn" class="shop-btn primary">继续战斗 ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏结束界面 -->
+    <div id="game-over" class="screen hidden">
+        <div class="game-over-container">
+            <h2 id="game-over-title">侠客陨落</h2>
+            <div class="game-over-stats">
+                <p>存活波数: <span id="final-wave">1</span></p>
+                <p>击杀敌人: <span id="final-kills">0</span></p>
+                <p>获得金币: <span id="final-gold">0</span></p>
+            </div>
+            <button id="restart-btn" class="menu-btn">重新开始</button>
+        </div>
+    </div>
+
+    <!-- 升级界面 -->
+    <div id="levelup-screen" class="screen hidden">
+        <div class="levelup-container">
+            <h2>内功突破！</h2>
+            <p class="levelup-subtitle">选择一项提升</p>
+            <div class="levelup-options" id="levelup-options">
+                <!-- 升级选项动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>
